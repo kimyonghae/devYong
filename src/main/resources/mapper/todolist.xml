@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.todolist">
+
+    <select id="getBoardAllList" parameterType="net.yhkim.devYong.todolist.Board" resultType="net.yhkim.devYong.todolist.Board">
+        select id
+              ,ifnull(
+                  concat(work ,": ",
+                  (
+                  select GROUP_CONCAT(b.relationId)
+                    from boardrelation b
+                   where b.boardId = a.id
+                  ))
+                  ,work
+              ) as work
+              ,createDate
+              ,lastModifyDate
+              ,procYn
+          from board a
+      order by id desc
+         limit #{start}, #{pageSize}
+    </select>
+
+    <select id="getTotalCount" resultType="int">
+        select count(*)
+          from board
+    </select>
+
+    <select id="getMaxID" resultType="int">
+        select ifnull(max(id)+1,1)
+          from board
+    </select>
+
+    <insert id="boardCreate" parameterType="hashMap">
+        INSERT INTO board(
+                     id
+                    ,work)
+             VALUES (#{id, jdbcType=VARCHAR}
+                    ,#{work, jdbcType=VARCHAR})
+    </insert>
+
+    <insert id="boardRelationCreate" parameterType="net.yhkim.devYong.todolist.BoardRelation">
+        INSERT INTO BOARDRELATION(
+                    boardId
+                   ,relationId)
+             VALUES (#{boardId, jdbcType=VARCHAR}
+                    ,#{relationId, jdbcType=VARCHAR})
+    </insert>
+
+    <select id="boardRead" parameterType="string" resultType="net.yhkim.devYong.todolist.Board">
+        select a.id
+              ,work
+              ,procYn
+              ,if(b.relationId is null, 1, 0) as procAble
+              ,createDate
+              ,lastModifyDate
+          from board a
+               left outer join
+               (select br.relationId
+                   from board bd
+                       ,boardrelation br
+                  where bd.id = br.boardId
+                    and bd.procYn = 0
+               group by br.relationId
+                )b on b.relationId = a.id
+         where a.id = #{id, jdbcType=VARCHAR}
+    </select>
+
+    <update id="boardUpdate" parameterType="net.yhkim.devYong.todolist.Board">
+        UPDATE BOARD SET WORK = #{work, jdbcType=VARCHAR}
+                        ,PROCYN = #{procYn, jdbcType=TINYINT}
+                        ,LASTMODIFYDATE = now()
+                   WHERE ID = #{id, jdbcType=VARCHAR}
+    </update>
+
+    <select id="boardRelationList" resultType="net.yhkim.devYong.todolist.Board">
+        select *
+          from board
+         where PROCYN = '0'
+    </select>
+</mapper>
