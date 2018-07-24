@@ -29,19 +29,19 @@ public class TodoListProcessImpl implements TodoListProcess {
         int totalCount = 0;//전체글 수
         int pageCount = 0;//페이지 수
         int currentPage = 1;//현재 페이지
-        int pageSize = 5;//페이지당 글 수
+        int pageSize = 10;//페이지당 글 수
         int start = 1;//페이지 시작 글 번호
 
         try {
-            totalCount = Integer.parseInt(todoListDao.getTotalCount().toString());
-            pageCount = totalCount/pageSize;
-            if((totalCount%pageSize)>0){
-                pageCount += 1;
-            }
             currentPage = Integer.parseInt(params.get("currentPage").toString());
             pageSize = Integer.parseInt(params.get("pageSize").toString());
             if(currentPage>1){
                 start = (currentPage-1) * pageSize + 1;
+            }
+            totalCount = Integer.parseInt(todoListDao.getTotalCount().toString());
+            pageCount = totalCount/pageSize;
+            if((totalCount%pageSize)>0){
+                pageCount += 1;
             }
 
             Paging pagination = new Paging();

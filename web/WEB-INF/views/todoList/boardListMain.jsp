@@ -22,7 +22,7 @@
             //메인페이지 오픈 시 1페이지 5개의 글을 default로 설정
             if(currentPage == 0 && pageSize == 0){
                 currentPage = 1;
-                pageSize = 5;
+                pageSize = 10;
             }
 
             $.ajax({
