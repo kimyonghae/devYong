@@ -1,9 +1,9 @@
 package net.yhkim.devYong.todolist;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Created by yong on 2018. 6. 30..
@@ -42,7 +42,7 @@ public class Board extends Paging{
     }
 
     public String getCreateDate() {
-        return FastDateFormat.getInstance("yyyy/MM/dd HH:mm:ss").format(createDate);
+        return FastDateFormat.getInstance("yyyy/MM/dd HH:mm:ss", TimeZone.getTimeZone("UTC")).format(createDate);
     }
 
     public void setCreateDate(Date createDate) {
@@ -50,7 +50,7 @@ public class Board extends Paging{
     }
 
     public String getLastModifyDate() {
-        return lastModifyDate!=null?FastDateFormat.getInstance("yyyy/MM/dd HH:mm:ss").format(lastModifyDate):"";
+        return lastModifyDate!=null?FastDateFormat.getInstance("yyyy/MM/dd HH:mm:ss", TimeZone.getTimeZone("UTC")).format(lastModifyDate):"";
     }
 
     public void setLastModifyDate(Date lastModifyDate) {

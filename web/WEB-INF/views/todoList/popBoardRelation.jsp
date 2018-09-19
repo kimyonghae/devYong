@@ -65,7 +65,7 @@
         }
         .wrapper-table {
             margin: 0 auto;
-            width: 1200px;
+            width: 300px;
             text-align: center;
         }
         table {

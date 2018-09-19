@@ -91,6 +91,12 @@
         .wrapper-table {
             margin: 0 auto;
             width: 1200px;
+            height: 330px;
+            text-align: center;
+        }
+        .wrapper-page {
+            margin: 0 auto;
+            width: 1200px;
             text-align: center;
         }
         table {
@@ -132,7 +138,9 @@
             <tbody id="tbody">
             </tbody>
         </table>
+    </div>
 
+    <div class="wrapper-page">
         <div id="pagination">
         </div>
         <div class="buttons">

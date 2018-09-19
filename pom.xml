@@ -12,7 +12,8 @@
         <java-version>1.8</java-version>
         <org.springframework-version>4.3.12.RELEASE</org.springframework-version>
         <org.aspectj-version>1.6.10</org.aspectj-version>
-        <org.slf4j-version>1.6.6</org.slf4j-version>
+        <jcloverslf4j.version>1.7.6</jcloverslf4j.version>
+        <logback.version>1.1.1</logback.version>
         <com.fasterxml.jackson.core-version>2.9.6</com.fasterxml.jackson.core-version>
     </properties>
 
@@ -44,47 +45,40 @@
             <version>${org.aspectj-version}</version>
         </dependency>
 
-        <!-- Logging -->
+        <!-- Logging
+
+        스프링에서는 기본적으로 commons.logging 라이브러리 ( Apache의 JCL, Jakarta Commons Logging )을 사용합니다.
+        즉 스프링 개발을 할 때 스프링이 뿜어내는 메시지는 JCL에 의존하여 로그를 남기는 것입니다.
+        실제로 spring-context 라이브러리를 설치할 때 프로젝트 폴더의 Maven Libarary를 확인해보시면 commons.logging 라이브러리를 확인할 수 있습니다.
+        예전에는 스프링에서 로그를 남길 때 Log4J를 사용했었는데, 성능 및 기능상의 이유로 대체 logger들이 많아졌고, 현재 대부분은 SLF4J 인터페이스를 구현한 Logback을 사용합니다.
+        Spring이 기존에 사용하던 로그 라이브러리 JCL 대신, 새로운 라이브러리 Logback을 사용하도록 하기 위해서는 SLF4J가 필요합니다.
+        즉 SLF4J는 JCL과 Log4J의 징검다리 역할을 한다고 보면 됩니다.
+
+        출처: http://victorydntmd.tistory.com/173 [victolee]
+        -->
+        <!-- Spring core -->
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${org.slf4j-version}</version>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${org.springframework-version}</version>
+            <!-- JCL 제외 -->
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+        <!-- Logback -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
-            <version>${org.slf4j-version}</version>
-            <scope>runtime</scope>
+            <version>${jcloverslf4j.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${org.slf4j-version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.15</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>javax.mail</groupId>
-                    <artifactId>mail</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.jms</groupId>
-                    <artifactId>jms</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.sun.jdmk</groupId>
-                    <artifactId>jmxtools</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.sun.jmx</groupId>
-                    <artifactId>jmxri</artifactId>
-                </exclusion>
-            </exclusions>
-            <scope>runtime</scope>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
         </dependency>
 
         <!-- @Inject -->
@@ -194,29 +188,6 @@
 
     </dependencies>
 
-
-    <!--<plugins>-->
-    <!--<plugin>-->
-    <!--<groupId>org.apache.maven.plugins</groupId>-->
-    <!--<artifactId>maven-compiler-plugin</artifactId>-->
-    <!--<version>2.5.1</version>-->
-    <!--<configuration>-->
-    <!--<source>${java-version}</source>-->
-    <!--<target>${java-version}</target>-->
-    <!--<compilerArgument>-Xlint:all</compilerArgument>-->
-    <!--<showWarnings>true</showWarnings>-->
-    <!--<showDeprecation>true</showDeprecation>-->
-    <!--</configuration>-->
-    <!--</plugin>-->
-    <!--<plugin>-->
-    <!--<groupId>org.codehaus.mojo</groupId>-->
-    <!--<artifactId>exec-maven-plugin</artifactId>-->
-    <!--<version>1.2.1</version>-->
-    <!--<configuration>-->
-    <!--<mainClass>org.test.int1.Main</mainClass>-->
-    <!--</configuration>-->
-    <!--</plugin>-->
-    <!--</plugins>-->
 
 
 </project>
